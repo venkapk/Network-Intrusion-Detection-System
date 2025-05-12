@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Intrusion Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 1200px;
+        }
+        .card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: none;
+            padding: 15px 20px;
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .result-card {
+            transition: all 0.3s ease;
+        }
+        .result-card.benign {
+            border-left: 5px solid #28a745;
+        }
+        .result-card.attack {
+            border-left: 5px solid #dc3545;
+        }
+        .feature-input {
+            margin-bottom: 15px;
+        }
+        #results-container {
+            min-height: 200px;
+        }
+        .chart-container {
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-shield-alt me-2"></i>Network Intrusion Detection</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-home me-1"></i>Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-chart-line me-1"></i>Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-question-circle me-1"></i>Help</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0"><i class="fas fa-cog me-2"></i>Model Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="model-form">
+                            <div class="mb-3">
+                                <label for="model-type" class="form-label">Classification Type</label>
+                                <select class="form-select" id="model-type">
+                                    <option value="binary">Binary (Benign/Attack)</option>
+                                    <option value="multiclass_3">3-Class Classification</option>
+                                    <option value="multiclass_4" selected>4-Class Classification</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="model-name" class="form-label">Model</label>
+                                <select class="form-select" id="model-name">
+                                    <option value="random_forest" selected>Random Forest</option>
+                                    <option value="xgboost">XGBoost</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Input Method</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="input-method" id="manual-input" checked>
+                                    <label class="form-check-label" for="manual-input">
+                                        Manual Input
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="input-method" id="file-upload">
+                                    <label class="form-check-label" for="file-upload">
+                                        File Upload (PCAP/CSV)
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="manual-input-card" class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0"><i class="fas fa-keyboard me-2"></i>Manual Input</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="feature-form">
+                            <div id="feature-inputs">
+                                <!-- Feature inputs will be dynamically generated here -->
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-play me-2"></i>Run Detection</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="file-upload-card" class="card" style="display: none;">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0"><i class="fas fa-file-upload me-2"></i>Upload Network Traffic</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="file-form" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="file-input" class="form-label">Select PCAP or CSV file</label>
+                                <input class="form-control" type="file" id="file-input" accept=".pcap,.csv">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-upload me-2"></i>Upload & Analyze</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0"><i class="fas fa-chart-pie me-2"></i>Detection Results</h5>
+                    </div>
+                    <div class="card-body" id="results-container">
+                        <div class="text-center py-5 text-muted">
+                            <i class="fas fa-chart-line fa-3x mb-3"></i>
+                            <p>Results will appear here after detection</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0"><i class="fas fa-info-circle me-2"></i>Model Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Binary Classification:</strong> Detects whether traffic is BENIGN or a PortScan attack.</p>
+                        <p><strong>3-Class Classification:</strong> Categorizes traffic as BENIGN, FTP-Patator, or SSH-Patator.</p>
+                        <p><strong>4-Class Classification:</strong> Extends the classification to BENIGN, Web Attack: Brute Force, Web Attack: XSS, and Web Attack: SQL Injection.</p>
+                        <p><small class="text-muted">Models trained on CIC-IDS2017 dataset with balanced class representation.</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Main application code
+        document.addEventListener('DOMContentLoaded', function() {
+            let features = [];
+            let modelType = 'multiclass_4';
+            
+            // Handle input method selection
+            document.getElementById('manual-input').addEventListener('change', function() {
+                document.getElementById('manual-input-card').style.display = 'block';
+                document.getElementById('file-upload-card').style.display = 'none';
+            });
+            
+            document.getElementById('file-upload').addEventListener('change', function() {
+                document.getElementById('manual-input-card').style.display = 'none';
+                document.getElementById('file-upload-card').style.display = 'block';
+            });
+            
+            // Handle model type change
+            document.getElementById('model-type').addEventListener('change', function() {
+                modelType = this.value;
+                loadFeatures();
+            });
+            
+            // Load features based on selected model
+            function loadFeatures() {
+                fetch(`/api/features?model_type=${modelType}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        features = data.features;
+                        const featureContainer = document.getElementById('feature-inputs');
+                        featureContainer.innerHTML = '';
+                        
+                        features.forEach(feature => {
+                            const div = document.createElement('div');
+                            div.className = 'feature-input';
+                            div.innerHTML = `
+                                <label for="${feature}" class="form-label">${feature}</label>
+                                <input type="number" step="any" class="form-control" id="${feature}" name="${feature}" 
+                                    placeholder="Enter value for ${feature}">
+                                <small class="form-text text-muted">${data.description[feature] || ''}</small>
+                            `;
+                            featureContainer.appendChild(div);
+                        });
+                    });
+            }
+            
+            // Handle feature form submission
+            document.getElementById('feature-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const featureValues = {};
+                features.forEach(feature => {
+                    const value = document.getElementById(feature).value;
+                    featureValues[feature] = parseFloat(value);
+                });
+                
+                const modelName = document.getElementById('model-name').value;
+                
+                // Make prediction request
+                fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model_type: modelType,
+                        model_name: modelName,
+                        features: featureValues
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    displayResults(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('results-container').innerHTML = `
+                        <div class="alert alert-danger" role="alert">
+                            An error occurred during prediction. Please try again.
+                        </div>
+                    `;
+                });
+            });
+            
+            // Handle file upload form submission
+            document.getElementById('file-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const fileInput = document.getElementById('file-input');
+                const file = fileInput.files[0];
+                
+                if (!file) {
+                    alert('Please select a file to upload');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message || data.error);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred during file upload');
+                });
+            });
+            
+            // Display prediction results
+            function displayResults(data) {
+                const resultsContainer = document.getElementById('results-container');
+                
+                // Determine if it's an attack or benign
+                const isAttack = data.prediction !== 'BENIGN';
+                const resultClass = isAttack ? 'attack' : 'benign';
+                const alertClass = isAttack ? 'danger' : 'success';
+                const icon = isAttack ? 'exclamation-triangle' : 'check-circle';
+                
+                // Create results HTML
+                resultsContainer.innerHTML = `
+                    <div class="alert alert-${alertClass} mb-4" role="alert">
+                        <i class="fas fa-${icon} me-2"></i>
+                        Traffic classified as <strong>${data.prediction}</strong>
+                    </div>
+                    
+                    <div class="card result-card ${resultClass} mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Detection Details</h5>
+                            <p class="card-text">Confidence: ${Math.round(data.probabilities[data.prediction] * 100)}%</p>
+                            <div class="progress mb-3">
+                                <div class="progress-bar bg-${alertClass}" role="progressbar" 
+                                    style="width: ${Math.round(data.probabilities[data.prediction] * 100)}%"
+                                    aria-valuenow="${Math.round(data.probabilities[data.prediction] * 100)}" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="probability-chart"></canvas>
+                    </div>
+                `;
+                
+                // Create probability chart
+                const ctx = document.getElementById('probability-chart').getContext('2d');
+                const chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(data.probabilities),
+                        datasets: [{
+                            label: 'Prediction Probability',
+                            data: Object.values(data.probabilities).map(p => p * 100),
+                            backgroundColor: Object.keys(data.probabilities).map(key => 
+                                key === 'BENIGN' ? 'rgba(40, 167, 69, 0.7)' : 'rgba(220, 53, 69, 0.7)'
+                            ),
+                            borderColor: Object.keys(data.probabilities).map(key => 
+                                key === 'BENIGN' ? 'rgb(40, 167, 69)' : 'rgb(220, 53, 69)'
+                            ),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Probability (%)'
+                                },
+                                max: 100
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Prediction Probabilities by Class'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Initial feature load
+            loadFeatures();
+        });
+    </script>
+</body>
+</html>
