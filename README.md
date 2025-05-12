@@ -15,26 +15,48 @@ A machine learning-based platform for detecting and classifying network intrusio
 - **Comprehensive ML pipeline** with feature scaling, PCA, and ensemble models
 - **Docker support** for easy deployment and scaling
 
+## Screenshots
+
+Here are some screenshots of the application:
+
+*Main interface with model settings and classification options*
+![Main Interface](./screenshots/main-interface.png)
+
+*Manual input of network traffic features for analysis*
+![Input Features](./screenshots/input-features.png)
+
+*Detection results showing classification and probability distribution*
+![Detection Results](./screenshots/detection-results.png)
+
 ## Tech Stack
 
 ### Backend
-- **Python**: Core programming language
-- **Flask**: Web framework for REST API implementation
-- **scikit-learn**: Machine learning library for model training and evaluation
-- **XGBoost**: Gradient boosting for high-performance classification
-- **NumPy/Pandas**: Data processing and analysis
+<p align="left">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask" />
+  <img src="https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white" alt="scikit-learn" />
+  <img src="https://img.shields.io/badge/XGBoost-006ACC?style=for-the-badge&logo=xgboost&logoColor=white" alt="XGBoost" />
+  <img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white" alt="NumPy" />
+  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" alt="Pandas" />
+</p>
 
 ### Frontend
-- **HTML5/CSS3/JavaScript**: Core web technologies
-- **Bootstrap**: Responsive UI components
-- **Chart.js**: Interactive data visualization
+<p align="left">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
+  <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap" />
+  <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chart.js&logoColor=white" alt="Chart.js" />
+</p>
 
 ### Machine Learning
-- **Random Forest**: Ensemble learning with decision trees
-- **XGBoost**: Advanced gradient boosting implementation
-- **Logistic Regression**: Baseline linear model
-- **PCA**: Dimensionality reduction for feature optimization
-- **SMOTE**: Class balancing for skewed network traffic data
+<p align="left">
+  <img src="https://img.shields.io/badge/Random%20Forest-4A154B?style=for-the-badge" alt="Random Forest" />
+  <img src="https://img.shields.io/badge/XGBoost-006ACC?style=for-the-badge" alt="XGBoost" />
+  <img src="https://img.shields.io/badge/Logistic%20Regression-013220?style=for-the-badge" alt="Logistic Regression" />
+  <img src="https://img.shields.io/badge/PCA-5C2D91?style=for-the-badge" alt="PCA" />
+  <img src="https://img.shields.io/badge/SMOTE-FF6B4A?style=for-the-badge" alt="SMOTE" />
+</p>
 
 ## Project Structure
 
