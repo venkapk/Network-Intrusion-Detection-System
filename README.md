@@ -2,94 +2,104 @@
 
 A machine learning-based platform for detecting and classifying network intrusions using real-world traffic data.
 
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
+![Flask](https://img.shields.io/badge/flask-3.0.3-green.svg)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-1.2.2-F7931E.svg)
+![XGBoost](https://img.shields.io/badge/XGBoost-2.0.3-006ACC.svg)
+
 ## Features
 
-- **Multi-model classification system** with support for binary and multi-class attack detection
-- **Flask REST API backend** with endpoints for predictions, model information, and data upload
-- **React frontend** with interactive visualizations for network traffic analysis
-- **ML pipeline** with feature scaling and PCA
+- **Multi-model classification system** with binary and multi-class intrusion detection
+- **Flask REST API backend** with prediction, model information, and data upload endpoints
+- **Interactive web UI** with real-time visualization of detection results
+- **Comprehensive ML pipeline** with feature scaling, PCA, and ensemble models
+- **Docker support** for easy deployment and scaling
 
 ## Tech Stack
 
 ### Backend
 - **Python**: Core programming language
-- **Flask**: Web framework for API development
-- **scikit-learn**: Machine learning library for classification algorithms
-- **XGBoost**: Gradient boosting framework
-- **NumPy/Pandas**: Data manipulation libraries
+- **Flask**: Web framework for REST API implementation
+- **scikit-learn**: Machine learning library for model training and evaluation
+- **XGBoost**: Gradient boosting for high-performance classification
+- **NumPy/Pandas**: Data processing and analysis
 
 ### Frontend
-- **React**: Frontend library for building the user interface
-- **JavaScript/ES6**: Programming language for frontend logic
-- **HTML5/CSS3**: Markup and styling
-- **Bootstrap**: UI component library
+- **HTML5/CSS3/JavaScript**: Core web technologies
+- **Bootstrap**: Responsive UI components
+- **Chart.js**: Interactive data visualization
 
 ### Machine Learning
-- **Random Forest**: Ensemble learning method for classification
+- **Random Forest**: Ensemble learning with decision trees
 - **XGBoost**: Advanced gradient boosting implementation
-- **Logistic Regression**: Linear model for binary and multiclass classification
-- **PCA**: Dimensionality reduction technique
+- **Logistic Regression**: Baseline linear model
+- **PCA**: Dimensionality reduction for feature optimization
+- **SMOTE**: Class balancing for skewed network traffic data
 
 ## Project Structure
 
 ```
 network-intrusion-detection-system/
 ├── api/                          # Backend Flask application
-│   ├── app.py                    # Main Flask app
-│   └── requirements.txt          # Python dependencies
+│   ├── app.py                    # Main Flask app with REST endpoints
 ├── models/                       # ML model storage
 │   ├── binary/                   # Binary classification models
 │   ├── multiclass_3/             # 3-class models
 │   └── multiclass_4/             # 4-class models
 ├── data/                         # Data storage
-│   ├── raw/                      # Raw datasets
-│   └── preprocessed/             # Processed data and preprocessing components
+│   ├── raw/                      # Raw network traffic datasets
+│   └── preprocessed/             # Processed features and model components
 ├── src/                          # Source code
-│   ├── preprocessing/            # Data preprocessing modules
-│   ├── training/                 # Model training scripts
-│   │   └── models.py             # Model creation code
-│   └── utils/                    # Utility functions
-├── ui/                           # Frontend React application
-│   ├── index.html                # Main HTML file
-│   ├── css/                      # Stylesheets
-│   └── js/                       # JavaScript files
-├── notebooks/                    # Jupyter notebooks for EDA and model development
-├── tests/                        # Test scripts
-├── main.py                       # Entry point script
-├── README.md                     # Project documentation
-├── requirements.txt              # Top-level Python dependencies
+│   ├── preprocessing/            # Data preprocessing module
+│   │   └── data_preprocessor.py  # Feature engineering and data cleaning
+│   └── training/                 # Model training scripts
+│       └── models.py             # Training pipeline implementation
+├── ui/                           # Frontend application
+│   ├── index.html                # Main web interface
+├── notebooks/                    # Jupyter notebooks for analysis
+├── main.py                       # Application entry point
+├── Dockerfile                    # Container configuration
+├── requirements.txt              # Python dependencies
 └── LICENSE                       # MIT License
 ```
 
 ## Installation & Setup
 
-### Prerequisites
-- Python 3.8+
-- Node.js 14+
-- Required Python packages (see requirements.txt)
+### Option 1: Local Installation
 
-### Backend Setup
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/network-intrusion-detection-system.git
 cd network-intrusion-detection-system
 
-# Create and activate virtual environment (optional but recommended)
+# Create and activate virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install required packages
 pip install -r requirements.txt
 
-# Start the Flask API server
+# Start the application
 python main.py --host 127.0.0.1 --port 5000
+```
+
+### Option 2: Docker Deployment
+
+```bash
+# Build the Docker image
+docker build -t nids:latest .
+
+# Run the container
+docker run -p 5000:5000 nids:latest
+```
 
 ## Usage
 
 1. Access the web interface at http://localhost:5000
-2. Upload network traffic data or manually input features
-3. Select a model type '(binary/multiclass)' and algorithm
-4. View prediction results and analysis
+2. Choose a classification type (Binary, 3-Class, or 4-Class)
+3. Select model type (Random Forest or XGBoost)
+4. Input network traffic features or upload a PCAP/CSV file
+5. View detection results with confidence scores and probability distribution
 
 ## API Endpoints
 
@@ -102,31 +112,57 @@ python main.py --host 127.0.0.1 --port 5000
 
 ## Model Performance
 
-### Binary Classification
-- **Accuracy**: 97%
-- **Precision**: 0.96-1.00
-- **Recall**: 0.92-1.00
+### Binary Classification (Attack vs. Benign)
+- **Accuracy**: 97%-100%
+- **Precision**: XGBoost & Random Forest achieved perfect 1.00 precision for both classes
+- **Recall**: XGBoost & Random Forest achieved perfect 1.00 recall for both classes
 - **F1-Score**: 0.96-1.00
+- **Best Model**: Random Forest and XGBoost (tied at 100% accuracy)
 
-### Multi-class Classification (3 classes)
-- **Accuracy**: 98%
+### 3-Class Classification
+- **Accuracy**: 98% (XGBoost, Random Forest)
 - **Weighted Avg Precision**: 0.99
 - **Weighted Avg Recall**: 0.98
 - **Weighted Avg F1-Score**: 0.98
+- **Class Performance**: Strong for majority class (0), moderate for class 1 (F1: 0.81), poor for rare class 2 (F1: 0.08)
+- **Best Model**: Random Forest and XGBoost (tied at 98% accuracy)
 
-### Multi-class Classification (4 classes)
-- **Accuracy**: 99%
-- **Weighted Avg Precision**: 1.00
-- **Weighted Avg Recall**: 0.99
-- **Weighted Avg F1-Score**: 0.99
+### 4-Class Classification
+- **Accuracy**: 99-100% (Random Forest)
+- **Weighted Avg Precision**: 1.00 (Random Forest)
+- **Weighted Avg Recall**: 0.99-1.00
+- **Weighted Avg F1-Score**: 0.99-1.00
+- **Class Performance**: Excellent for majority class (0), moderate for rare classes (1, 2, 3)
+- **Best Model**: Random Forest (100% weighted average F1-score)
 
-## Feature Importance
+> **Note on Class Imbalance**: While overall accuracy is very high for all models, performance on minority classes varies. Random Forest consistently performs best across all classification tasks, especially with imbalanced data.
 
-The models identified these key features for detecting network intrusions:
-- PSH Flag Count
-- Down/Up Ratio
-- Initial Window Bytes (Forward/Backward)
-- Minimum Segment Size (Forward)
+## Key Features For Detection
+
+Feature importance analysis identified these critical network traffic indicators across different classification tasks:
+
+### Binary Classification (Most Important)
+- **Destination Port**: Target port of the connection
+- **Total Length of Fwd Packets**: Total size of packets in forward direction
+- **Bwd Packet Length**: Maximum and minimum packet sizes in backward direction
+- **Bwd IAT Statistics**: Total, mean, and standard deviation of inter-arrival times
+- **PSH Flag Count**: Number of TCP packets with PSH flag set
+
+### 3-Class Classification (Most Important)
+- **Min Packet Length**: Smallest packet size in the connection
+- **PSH Flag Count**: Number of TCP packets with PSH flag set
+- **Init_Win_bytes_forward**: Initial TCP window size in forward direction
+- **act_data_pkt_fwd**: Number of packets with at least 1 byte of TCP data payload
+
+### 4-Class Classification (Most Important)
+- **PSH Flag Count**: Number of TCP packets with PSH flag set
+- **Down/Up Ratio**: Ratio between download and upload traffic volume
+- **Init_Win_bytes_forward/backward**: TCP initial window size in both directions
+
+### Common Indicators Across All Classification Types
+- **PSH Flag Count**: Consistently important across all attack types
+- **Initial Window Size**: Important for both 3-class and 4-class attacks
+- **Traffic Direction Metrics**: Down/Up ratio and directional packet characteristics
 
 ## Challenges & Solutions
 
@@ -151,7 +187,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Network Intrusion Detection Dataset providers
 - Flask and React communities for excellent documentation
 - scikit-learn and XGBoost contributors
-
-## Contact
-
-Your Name - your.email@example.com
