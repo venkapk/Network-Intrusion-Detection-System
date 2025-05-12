@@ -79,6 +79,7 @@ network-intrusion-detection-system/
 ├── ui/                           # Frontend application
 │   ├── index.html                # Main web interface
 ├── notebooks/                    # Jupyter notebooks for analysis
+├── screenshots/                  # Screenshots
 ├── main.py                       # Application entry point
 ├── Dockerfile                    # Container configuration
 ├── requirements.txt              # Python dependencies
