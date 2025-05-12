@@ -1,0 +1,52 @@
+==================================================
+MODEL EVALUATION DIAGNOSTIC SUMMARY
+==================================================
+
+SIMPLE MODEL TEST RESULTS:
+--------------------------------------------------
+Decision Stump (depth=1):
+  accuracy: 0.8470
+  f1_score: 0.9153
+  feature_used: feature_3
+  threshold: 0.11521946638822556
+Decision Tree (depth=2):
+  accuracy: 0.7746
+  f1_score: 0.8714
+
+SINGLE FEATURE TEST RESULTS:
+--------------------------------------------------
+Feature: feature_1
+  Accuracy: 0.6574
+  F1 Score: 0.7921
+Feature: feature_3
+  Accuracy: 0.2867
+  F1 Score: 0.4443
+Feature: feature_2
+  Accuracy: 0.6387
+  F1 Score: 0.7781
+Feature: feature_0
+  Accuracy: 0.7777
+  F1 Score: 0.8736
+
+FEATURE IMPORTANCE SUMMARY:
+--------------------------------------------------
+Random Forest Top Features:
+  1. feature_2: 0.3016
+  2. feature_3: 0.2876
+  3. feature_0: 0.2208
+  4. feature_1: 0.1900
+  Features needed for 95% importance: 4
+
+XGBoost Top Features:
+  1. feature_3: 0.3100
+  2. feature_2: 0.2798
+  3. feature_0: 0.2632
+  4. feature_1: 0.1469
+  Features needed for 95% importance: 4
+
+
+DATA LEAKAGE ASSESSMENT:
+--------------------------------------------------
+No immediate evidence of data leakage detected from simple model tests.
+However, the perfect performance of Random Forest and XGBoost still warrants investigation.
+

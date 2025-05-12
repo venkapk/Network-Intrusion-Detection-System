@@ -1,0 +1,54 @@
+==================================================
+MODEL EVALUATION DIAGNOSTIC SUMMARY
+==================================================
+
+SIMPLE MODEL TEST RESULTS:
+--------------------------------------------------
+Decision Stump (depth=1):
+  accuracy: 0.9610
+  f1_score: 0.9606
+  feature_used: feature_1
+  threshold: -0.4649496227502823
+Decision Tree (depth=2):
+  accuracy: 0.9791
+  f1_score: 0.9791
+
+SINGLE FEATURE TEST RESULTS:
+--------------------------------------------------
+Feature: feature_1
+  Accuracy: 0.9575
+  F1 Score: 0.9569
+Feature: feature_2
+  Accuracy: 0.5342
+  F1 Score: 0.5403
+Feature: feature_0
+  Accuracy: 0.5905
+  F1 Score: 0.5966
+Feature: feature_3
+  Accuracy: 0.7089
+  F1 Score: 0.6740
+
+FEATURE IMPORTANCE SUMMARY:
+--------------------------------------------------
+Random Forest Top Features:
+  1. feature_1: 0.6107
+  2. feature_0: 0.2245
+  3. feature_2: 0.1073
+  4. feature_3: 0.0575
+  Features needed for 95% importance: 4
+
+XGBoost Top Features:
+  1. feature_1: 0.5775
+  2. feature_0: 0.2790
+  3. feature_2: 0.1201
+  4. feature_3: 0.0234
+  Features needed for 95% importance: 3
+
+
+DATA LEAKAGE ASSESSMENT:
+--------------------------------------------------
+POTENTIAL DATA LEAKAGE DETECTED!
+The following features achieve >95% accuracy alone, suggesting data leakage:
+  - feature_1: 95.75% accuracy
+
+Recommendation: Review these features for potential information leakage.

@@ -1,0 +1,5 @@
+Feature,Importance,Cumulative_Importance
+feature_1,0.57753915,0.57753915
+feature_0,0.27896586,0.85650504
+feature_2,0.1200605,0.97656554
+feature_3,0.02343458,1.0000001
