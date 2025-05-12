@@ -69,7 +69,7 @@ network-intrusion-detection-system/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/network-intrusion-detection-system.git
+git clone https://github.com/venkapk/network-intrusion-detection-system.git
 cd network-intrusion-detection-system
 
 # Create and activate virtual environment
